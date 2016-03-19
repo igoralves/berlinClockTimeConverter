@@ -1,9 +1,12 @@
-package com.ubs.opsit.interviews;
+package com.ubs.opsit.interviews.time;
 
 /**
+ * Simple class for representing time with an special handling for 24:00:00. The java.time.LocalTime handles 24:00:00 as "00:00:00",
+ * it cannot be used considering the acceptance tests
+ * <p/>
  * Created by Igor Alves on 2016-03-19.
  */
-public class MyLocalTime {
+public class Time {
 
     public static final int HOUR_INDEX = 0;
     public static final int MINUTE_INDEX = 1;
@@ -18,7 +21,7 @@ public class MyLocalTime {
      *
      * @param time String with the time using HH:mm or HH:mm:ss format
      */
-    public MyLocalTime(String time) {
+    public Time(String time) {
 
         final String[] timeArray = time.split(":");
 
@@ -43,15 +46,15 @@ public class MyLocalTime {
     /**
      * Converts a String to int, throwing an unchecked exception if it is not possible
      *
-     * @param s String to be converted
+     * @param string String to be converted
      * @return An int
      */
-    private int getValue(String s) {
+    private int getValue(String string) {
 
         try {
-            return Integer.parseInt(s);
+            return Integer.parseInt(string);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("'" + s + "' " + "is not a valid number");
+            throw new IllegalArgumentException("'" + string + "' " + "is not a valid number");
         }
     }
 
