@@ -14,11 +14,12 @@ public class BerlinClockTimeConverter implements TimeConverter {
     private static final Logger logger = LoggerFactory.getLogger(BerlinClockTimeConverter.class);
 
     public static final String NEW_LINE = "\n";
+    public static final String YELLOW = "Y";
+    public static final String OFF = "O";
+    public static final String RED = "R";
 
     @Override
     public String convertTime(String aTime) {
-
-        // TODO refactor adding this logic in a class such as BerlinClock
 
         final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         final LocalTime time = LocalTime.parse(aTime, dateTimeFormatter);
@@ -27,29 +28,33 @@ public class BerlinClockTimeConverter implements TimeConverter {
 
         final StringBuilder sb = new StringBuilder();
 
-        sb.append(buildRoundLight(time));
+        sb.append(buildRoundLight(aTime));
         sb.append(NEW_LINE);
-        sb.append(buildFirstLine(time));
+        sb.append(buildFirstLine(aTime));
         sb.append(NEW_LINE);
-        sb.append(buildSecondLine(time));
+        sb.append(buildSecondLine(aTime));
         sb.append(NEW_LINE);
-        sb.append(buildThirdLine(time));
+        sb.append(buildThirdLine(aTime));
         sb.append(NEW_LINE);
-        sb.append(buildForthLine(time));
+        sb.append(buildForthLine(aTime));
 
         return sb.toString();
     }
 
-    protected String buildRoundLight(LocalTime time) {
+    protected String buildRoundLight(String time) {
 
-        final boolean isEven = time.getSecond() % 2 == 0;
+        final MyLocalTime myLocalTime = new MyLocalTime(time);
 
-        return isEven ? "Y" : "O";
+        final boolean isEven = myLocalTime.getSecond() % 2 == 0;
+
+        return isEven ? YELLOW : OFF;
     }
 
-    protected String buildFirstLine(LocalTime time) {
+    protected String buildFirstLine(String time) {
 
-        final int numberOfRedLights = time.getHour() / 5;
+        final MyLocalTime myLocalTime = new MyLocalTime(time);
+
+        final int numberOfRedLights = myLocalTime.getHour() / 5;
         final StringBuilder sb = new StringBuilder();
 
 
@@ -57,9 +62,9 @@ public class BerlinClockTimeConverter implements TimeConverter {
         for (int i = 1; i <= 4; i++) {
 
             if (numberOfRedLights >= i) {
-                sb.append("R");
+                sb.append(RED);
             } else {
-                sb.append("O");
+                sb.append(OFF);
             }
         }
 
@@ -67,18 +72,20 @@ public class BerlinClockTimeConverter implements TimeConverter {
     }
 
     // TODO this method is almost exactly as same as buildFirstLine...
-    protected String buildSecondLine(LocalTime time) {
+    protected String buildSecondLine(String time) {
 
-        final int numberOfRedLights = time.getHour() % 5;
+        final MyLocalTime myLocalTime = new MyLocalTime(time);
+
+        final int numberOfRedLights = myLocalTime.getHour() % 5;
         final StringBuilder sb = new StringBuilder();
 
         // TODO explain what I'm doing
         for (int i = 1; i <= 4; i++) {
 
             if (numberOfRedLights >= i) {
-                sb.append("R");
+                sb.append(RED);
             } else {
-                sb.append("O");
+                sb.append(OFF);
             }
 
         }
@@ -86,9 +93,11 @@ public class BerlinClockTimeConverter implements TimeConverter {
         return sb.toString();
     }
 
-    protected String buildThirdLine(LocalTime time) {
+    protected String buildThirdLine(String time) {
 
-        final int numberOfLights = time.getMinute() / 5;
+        final MyLocalTime myLocalTime = new MyLocalTime(time);
+
+        final int numberOfLights = myLocalTime.getMinute() / 5;
         final StringBuilder sb = new StringBuilder();
 
         // TODO explain what I'm doing
@@ -97,13 +106,13 @@ public class BerlinClockTimeConverter implements TimeConverter {
             if (numberOfLights >= i) {
 
                 if (i % 3 == 0) {
-                    sb.append("R");
+                    sb.append(RED);
                 } else {
-                    sb.append("Y");
+                    sb.append(YELLOW);
                 }
 
             } else {
-                sb.append("O");
+                sb.append(OFF);
             }
 
         }
@@ -112,18 +121,20 @@ public class BerlinClockTimeConverter implements TimeConverter {
     }
 
     // TODO this is very similar to buildSecondLine()!!
-    protected String buildForthLine(LocalTime time) {
+    protected String buildForthLine(String time) {
 
-        final int numberOfRedLights = time.getMinute() % 5;
+        final MyLocalTime myLocalTime = new MyLocalTime(time);
+
+        final int numberOfRedLights = myLocalTime.getMinute() % 5;
         final StringBuilder sb = new StringBuilder();
 
         // TODO explain what I'm doing
         for (int i = 1; i <= 4; i++) {
 
             if (numberOfRedLights >= i) {
-                sb.append("Y");
+                sb.append(YELLOW);
             } else {
-                sb.append("O");
+                sb.append(OFF);
             }
 
         }
